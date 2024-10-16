@@ -1,6 +1,7 @@
 import * as Three from 'three';
-console.log('THREE', Three)
-// 目标：了解three的最基本内容
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+console.log('OrbitControls', OrbitControls)
+// 目标：使用控制器查看3d物体
 
 // 创建场景
 const scene = new Three.Scene()
@@ -31,8 +32,21 @@ console.log('renderer', renderer)
 // 将webgl canvas内容添加到body
 document.body.appendChild(renderer.domElement)
 
-//使用渲染器，通过相机将场景渲染出来
-renderer.render(scene,camera)
+// //使用渲染器，通过相机将场景渲染出来
+// renderer.render(scene, camera)
+// 用渲染函数渲染
+
+// 创建轨道控制器
+const controls = new OrbitControls(camera, renderer.domElement)
+
+//渲染函数
+const render = () => {
+  renderer.render(scene, camera)
+  // 渲染下一帧的时候执行渲染
+  requestAnimationFrame(render)
+}
+render()
+
 
 
 
