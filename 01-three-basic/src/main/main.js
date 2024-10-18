@@ -1,7 +1,7 @@
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 console.log('OrbitControls', OrbitControls)
-// 目标：使用控制器查看3d物体
+// 目标：控制3d物体移动
 
 // 创建场景
 const scene = new Three.Scene()
@@ -20,8 +20,16 @@ const cubeGeometry = new Three.BoxGeometry(1, 1, 1);
 const cubeMaterial = new Three.MeshBasicMaterial({ color: 0xffff00 })
 //根据几何体和材质创建物体
 const cube = new Three.Mesh(cubeGeometry, cubeMaterial)
+
+// 修改物体位置
+// 方法
+// cube.position.set(5,0,0)
+// 属性
+// cube.position.x = 5
+
 // 将几何体添加到场景
 scene.add(cube);
+console.log('cube', cube)
 
 //初始化渲染器
 const renderer = new Three.WebGLRenderer()
@@ -39,12 +47,18 @@ document.body.appendChild(renderer.domElement)
 // 创建轨道控制器
 const controls = new OrbitControls(camera, renderer.domElement)
 // 添加坐标轴辅助器
-const axesHelper=new Three.AxesHelper(5);
+const axesHelper = new Three.AxesHelper(5);
 scene.add(axesHelper)
 
 
 //渲染函数
 const render = () => {
+  // 每次render都运动
+  cube.position.x += 0.01
+  if (cube.position.x > 5) {
+    cube.position.x = 0
+  }
+
   renderer.render(scene, camera)
   // 渲染下一帧的时候执行渲染
   requestAnimationFrame(render)
