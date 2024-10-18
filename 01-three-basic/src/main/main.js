@@ -38,6 +38,10 @@ document.body.appendChild(renderer.domElement)
 
 // 创建轨道控制器
 const controls = new OrbitControls(camera, renderer.domElement)
+// 添加坐标轴辅助器
+const axesHelper=new Three.AxesHelper(5);
+scene.add(axesHelper)
+
 
 //渲染函数
 const render = () => {
