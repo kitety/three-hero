@@ -58,13 +58,18 @@ scene.add(axesHelper)
 
 
 //渲染函数
-const render = () => {
+const render = (time) => {
+  // console.log('time', time)
   // 每次render都运动
-  cube.position.x += 0.01
-  cube.rotation.x += 0.01// 逆时针，右手
-  if (cube.position.x > 5) {
-    cube.position.x = 0
-  }
+  // cube.position.x += 0.01
+  // cube.rotation.x += 0.01// 逆时针，右手
+  // if (cube.position.x > 5) {
+  //   cube.position.x = 0
+  // }
+  // 秒,路程=时间*速度，避免时快时慢
+  let t = time / 1000
+  cube.position.x = (t * 1) % 5;
+
 
   renderer.render(scene, camera)
   // 渲染下一帧的时候执行渲染
