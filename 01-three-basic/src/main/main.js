@@ -1,7 +1,7 @@
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 console.log('OrbitControls', OrbitControls)
-// 目标：requestAnimationFrame 时间参数•控制物本动画
+// 目标：Clock 跟踪时间对象
 
 // 创建场景
 const scene = new Three.Scene()
@@ -56,6 +56,9 @@ const controls = new OrbitControls(camera, renderer.domElement)
 const axesHelper = new Three.AxesHelper(5);
 scene.add(axesHelper)
 
+// 设置始终
+const clock = new Three.Clock()
+
 
 //渲染函数
 const render = (time) => {
@@ -66,9 +69,23 @@ const render = (time) => {
   // if (cube.position.x > 5) {
   //   cube.position.x = 0
   // }
+
+
   // 秒,路程=时间*速度，避免时快时慢
-  let t = time / 1000
-  cube.position.x = (t * 1) % 5;
+  // let t = time / 1000
+  // cube.position.x = (t * 1) % 5;
+
+  // 获取时钟运行的总时长
+  // const t = clock.getElapsedTime()// 会设置oldTime
+  // cube.position.x = (t * 1) % 5;
+
+  // 获取间隔时间
+  const deltaT = clock.getDelta()// 会设置oldTime
+  console.log('两次获取间隔时间', deltaT, 1 / deltaT)
+  cube.position.x += (deltaT * 1);
+  if (cube.position.x > 5) {
+    cube.position.x = 0
+  }
 
 
   renderer.render(scene, camera)
