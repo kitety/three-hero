@@ -1,7 +1,7 @@
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 console.log('OrbitControls', OrbitControls)
-// 目标：设置物体缩放
+// 目标：requestAnimationFrame 时间参数•控制物本动画
 
 // 创建场景
 const scene = new Three.Scene()
