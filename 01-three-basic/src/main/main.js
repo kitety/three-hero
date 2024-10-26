@@ -2,7 +2,7 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：gsap 动画
+// 目标：根据尺寸变化实现自适应画面
 
 // 创建场景
 const scene = new Three.Scene()
@@ -52,7 +52,11 @@ document.body.appendChild(renderer.domElement)
 // 用渲染函数渲染
 
 // 创建轨道控制器
-const controls = new OrbitControls(camera, renderer.domElement)
+const controls = new OrbitControls(camera, renderer.domElement);
+// 开启阻尼
+controls.enableDamping = true
+// 阻尼系数
+controls.dampingFactor = 0.01
 // 添加坐标轴辅助器
 const axesHelper = new Three.AxesHelper(5);
 scene.add(axesHelper)
@@ -121,9 +125,23 @@ const render = (time) => {
   renderer.render(scene, camera)
   // 渲染下一帧的时候执行渲染
   requestAnimationFrame(render)
+  controls.update()
 }
 render()
 
+// 监听窗口尺寸变化
+window.addEventListener('resize', () => {
+  const width = window.innerWidth
+  const height = window.innerHeight
+  // 更新摄像头
+  camera.aspect = width / height
+  // 更新摄像头投影矩阵
+  camera.updateProjectionMatrix()
+  // 更新渲染器
+  renderer.setSize(width, height)
+  //设置渲染器的像素比
+  renderer.setPixelRatio(window.devicePixelRatio)
+})
 
 
 
