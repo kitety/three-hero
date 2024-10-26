@@ -1,7 +1,8 @@
+import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-console.log('OrbitControls', OrbitControls)
-// 目标：Clock 跟踪时间对象
+// console.log('OrbitControls', OrbitControls)
+// 目标：gsap 动画
 
 // 创建场景
 const scene = new Three.Scene()
@@ -59,6 +60,20 @@ scene.add(axesHelper)
 // 设置始终
 const clock = new Three.Clock()
 
+// gsap设置动画 位置
+gsap.to(cube.position, {
+  x: 5,
+  duration: 5,
+  ease: 'power1.out',
+  repeat: -1,
+})
+// gsap设置动画 旋转
+gsap.to(cube.rotation, {
+  x: Math.PI * 2,
+  duration: 5,
+  ease: 'power1.out',
+  repeat: -1,
+})
 
 //渲染函数
 const render = (time) => {
@@ -80,12 +95,12 @@ const render = (time) => {
   // cube.position.x = (t * 1) % 5;
 
   // 获取间隔时间
-  const deltaT = clock.getDelta()// 会设置oldTime
-  console.log('两次获取间隔时间', deltaT, 1 / deltaT)
-  cube.position.x += (deltaT * 1);
-  if (cube.position.x > 5) {
-    cube.position.x = 0
-  }
+  // const deltaT = clock.getDelta()// 会设置oldTime
+  // console.log('两次获取间隔时间', deltaT, 1 / deltaT)
+  // cube.position.x += (deltaT * 1);
+  // if (cube.position.x > 5) {
+  //   cube.position.x = 0
+  // }
 
 
   renderer.render(scene, camera)
