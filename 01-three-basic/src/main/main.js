@@ -1,8 +1,9 @@
+import * as dat from 'dat.gui';
 import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：调用js接口控制画布全屏和退出全屏
+// 目标：dat gui
 
 // 创建场景
 const scene = new Three.Scene()
@@ -21,6 +22,55 @@ const cubeGeometry = new Three.BoxGeometry(1, 1, 1);
 const cubeMaterial = new Three.MeshBasicMaterial({ color: 0xffff00 })
 //根据几何体和材质创建物体
 const cube = new Three.Mesh(cubeGeometry, cubeMaterial)
+
+// gui
+const gui = new dat.GUI()
+// x
+const cubeFolder = gui.addFolder('位置')
+cubeFolder.add(cube.position, 'x', 0, 5).name('x轴').step(0.01).onChange((value) => {
+  console.log('x轴', value)
+}).onFinishChange((value) => {
+  console.log('x轴结束', value)
+})
+cubeFolder.add(cube.position, 'y', 0, 5).name('y轴').step(0.01)
+cubeFolder.add(cube.position, 'z', 0, 5).name('z轴').step(0.01)
+// rotate
+const rotateFolder = gui.addFolder('旋转')
+rotateFolder.add(cube.rotation, 'x', 0, Math.PI * 2).name('x轴').step(0.01)
+rotateFolder.add(cube.rotation, 'y', 0, Math.PI * 2).name('y轴').step(0.01)
+rotateFolder.add(cube.rotation, 'z', 0, Math.PI * 2).name('z轴').step(0.01)
+// color
+const colorFolder = gui.addFolder('颜色')
+const params = {
+  color: '#ffff00',
+  fn: () => {
+    const animate1 = gsap.to(cube.position, {
+      x: 5,
+      duration: 5,
+      ease: 'power1.out',
+      repeat: -1,
+      onRepeat: () => {
+        console.log('动画重复')
+      },
+    })
+  }
+}
+// 修改cube color
+colorFolder.addColor(params, 'color').name('颜色').onChange((value) => {
+  console.log('value', value)
+  cube.material.color.set(value)
+})
+// 控制是否显示
+const visibleFolder = gui.addFolder('是否显示')
+visibleFolder.add(cube, 'visible').name('是否显示')
+
+// 点击按钮，执行某个函数
+const clickFolder = gui.addFolder('操作按钮')
+clickFolder.add(params, 'fn').name('移动')
+// 是否显示线框
+const wireframeFolder = gui.addFolder('线框')
+wireframeFolder.add(cubeMaterial, 'wireframe').name('是否显示线框')
+
 
 // 修改物体位置
 // 方法
@@ -65,39 +115,39 @@ scene.add(axesHelper)
 const clock = new Three.Clock()
 
 // gsap设置动画 位置
-const animate1 = gsap.to(cube.position, {
-  x: 5,
-  duration: 5,
-  ease: 'power1.out',
-  repeat: -1,
-  onRepeat: () => {
-    console.log('动画重复')
-  },
-  yoyo: true,
-})
-// gsap设置动画 旋转
-gsap.to(cube.rotation, {
-  x: Math.PI * 2,
-  duration: 5,
-  ease: 'power1.out',
-  repeat: -1,
-  onRepeat: () => {
-    console.log('动画重复')
-  },
-  yoyo: true,
-})
+// const animate1 = gsap.to(cube.position, {
+//   x: 5,
+//   duration: 5,
+//   ease: 'power1.out',
+//   repeat: -1,
+//   onRepeat: () => {
+//     console.log('动画重复')
+//   },
+//   yoyo: true,
+// })
+// // gsap设置动画 旋转
+// gsap.to(cube.rotation, {
+//   x: Math.PI * 2,
+//   duration: 5,
+//   ease: 'power1.out',
+//   repeat: -1,
+//   onRepeat: () => {
+//     console.log('动画重复')
+//   },
+//   yoyo: true,
+// })
 window.addEventListener('dblclick', () => {
-  // 全屏
-  if (!document.fullscreenElement) {
-    renderer.domElement.requestFullscreen()
-  } else {
-    document.exitFullscreen()
-  }
-  if (animate1.isActive()) {
-    animate1.pause()
-  } else {
-    animate1.resume()
-  }
+  // // 全屏
+  // if (!document.fullscreenElement) {
+  //   renderer.domElement.requestFullscreen()
+  // } else {
+  //   document.exitFullscreen()
+  // }
+  // if (animate1.isActive()) {
+  //   animate1.pause()
+  // } else {
+  //   animate1.resume()
+  // }
 })
 
 //渲染函数
@@ -148,6 +198,5 @@ window.addEventListener('resize', () => {
   //设置渲染器的像素比
   renderer.setPixelRatio(window.devicePixelRatio)
 })
-
 
 
