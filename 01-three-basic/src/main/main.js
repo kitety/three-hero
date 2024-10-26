@@ -61,11 +61,15 @@ scene.add(axesHelper)
 const clock = new Three.Clock()
 
 // gsap设置动画 位置
-gsap.to(cube.position, {
+const animate1 = gsap.to(cube.position, {
   x: 5,
   duration: 5,
   ease: 'power1.out',
   repeat: -1,
+  onRepeat: () => {
+    console.log('动画重复')
+  },
+  yoyo: true,
 })
 // gsap设置动画 旋转
 gsap.to(cube.rotation, {
@@ -73,6 +77,17 @@ gsap.to(cube.rotation, {
   duration: 5,
   ease: 'power1.out',
   repeat: -1,
+  onRepeat: () => {
+    console.log('动画重复')
+  },
+  yoyo: true,
+})
+window.addEventListener('dblclick', () => {
+  if (animate1.isActive()) {
+    animate1.pause()
+  } else {
+    animate1.resume()
+  }
 })
 
 //渲染函数
