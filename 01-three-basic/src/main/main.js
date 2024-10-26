@@ -2,7 +2,7 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：根据尺寸变化实现自适应画面
+// 目标：调用js接口控制画布全屏和退出全屏
 
 // 创建场景
 const scene = new Three.Scene()
@@ -87,6 +87,12 @@ gsap.to(cube.rotation, {
   yoyo: true,
 })
 window.addEventListener('dblclick', () => {
+  // 全屏
+  if (!document.fullscreenElement) {
+    renderer.domElement.requestFullscreen()
+  } else {
+    document.exitFullscreen()
+  }
   if (animate1.isActive()) {
     animate1.pause()
   } else {
