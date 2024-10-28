@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：设置顶点创建矩形
+// 目标：炫酷三角形
 
 // 创建场景
 const scene = new Three.Scene()
@@ -14,27 +14,30 @@ const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerH
 camera.position.set(0, 0, 10)
 // 添加不添加都可以
 // scene.add(camera)
-
-// 添加一个物体
-// 创建几何体
-const geometry = new Three.BufferGeometry();
-// 6个顶点
-// 逆时针
-const vertices = new Float32Array([
-  -1.0, -1.0, 1.0,
-  1.0, -1.0, 1.0,
-  1.0, 1.0, 1.0,
-
-  1.0, 1.0, 1.0,
-  -1.0, 1.0, 1.0,
-  -1.0, -1.0, 1.0
-])
-geometry.setAttribute('position', new Three.BufferAttribute(vertices, 3))
-console.log('geometry', geometry)
-// 材质
-const material = new Three.MeshBasicMaterial({ color: 0xffff00 })
-//根据几何体和材质创建物体
-const cube = new Three.Mesh(geometry, material)
+let cube;
+let material;
+// 50个三角形
+for (let i = 0; i < 50; i++) {
+  // 添加一个物体
+  // 创建几何体
+  const geometry = new Three.BufferGeometry();
+  // 3个顶点
+  // 逆时针
+  const positionArr = new Float32Array(9)
+  // 三个顶点，9个值
+  for (let j = 0; j < 9; j++) {
+    positionArr[j] = Math.random() * 5-2.5
+  }
+  geometry.setAttribute('position', new Three.BufferAttribute(positionArr, 3))
+  let color = new Three.Color(Math.random(), Math.random(), Math.random())
+  // 材质
+  material = new Three.MeshBasicMaterial({ color, opacity: Math.random(), transparent: true })
+  //根据几何体和材质创建物体
+  cube = new Three.Mesh(geometry, material)
+  // 将几何体添加到场景
+  scene.add(cube);
+  console.log('cube', cube)
+}
 
 // gui
 const gui = new dat.GUI()
@@ -97,9 +100,7 @@ wireframeFolder.add(material, 'wireframe').name('是否显示线框')
 // cube.rotation.set(Math.PI/8, 0, 0)
 
 
-// 将几何体添加到场景
-scene.add(cube);
-console.log('cube', cube)
+
 
 //初始化渲染器
 const renderer = new Three.WebGLRenderer()
