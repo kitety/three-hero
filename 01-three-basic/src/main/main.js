@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：dat gui
+// 目标：设置顶点创建矩形
 
 // 创建场景
 const scene = new Three.Scene()
@@ -17,11 +17,24 @@ camera.position.set(0, 0, 10)
 
 // 添加一个物体
 // 创建几何体
-const cubeGeometry = new Three.BoxGeometry(1, 1, 1);
+const geometry = new Three.BufferGeometry();
+// 6个顶点
+// 逆时针
+const vertices = new Float32Array([
+  -1.0, -1.0, 1.0,
+  1.0, -1.0, 1.0,
+  1.0, 1.0, 1.0,
+
+  1.0, 1.0, 1.0,
+  -1.0, 1.0, 1.0,
+  -1.0, -1.0, 1.0
+])
+geometry.setAttribute('position', new Three.BufferAttribute(vertices, 3))
+console.log('geometry', geometry)
 // 材质
-const cubeMaterial = new Three.MeshBasicMaterial({ color: 0xffff00 })
+const material = new Three.MeshBasicMaterial({ color: 0xffff00 })
 //根据几何体和材质创建物体
-const cube = new Three.Mesh(cubeGeometry, cubeMaterial)
+const cube = new Three.Mesh(geometry, material)
 
 // gui
 const gui = new dat.GUI()
@@ -69,7 +82,7 @@ const clickFolder = gui.addFolder('操作按钮')
 clickFolder.add(params, 'fn').name('移动')
 // 是否显示线框
 const wireframeFolder = gui.addFolder('线框')
-wireframeFolder.add(cubeMaterial, 'wireframe').name('是否显示线框')
+wireframeFolder.add(material, 'wireframe').name('是否显示线框')
 
 
 // 修改物体位置
