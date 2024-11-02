@@ -3,12 +3,12 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：炫酷三角形
+// 目标：纹理属性 详解纹理偏移
 
 // 创建场景
 const scene = new Three.Scene()
 // 创建相机
-const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
+const camera = new Three.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.0001, 1000)
 
 // 设置相机位置
 camera.position.set(0, 0, 10)
@@ -18,6 +18,23 @@ let cube;
 
 const texture = new Three.TextureLoader()
 const doorTexture = texture.load('./assets/door.jpg')
+// 纹理偏移
+// doorTexture.offset.x=0.5
+// doorTexture.offset.y=0.5
+
+// 设置旋转
+// 逆时针为正，默认原点为中心点左下角（0,0）
+// doorTexture.rotation=Math.PI/4
+// doorTexture.center.set(0.5,0.5)
+// 设置是否重复
+doorTexture.repeat.set(2,3)
+//x 重复
+doorTexture.wrapS=Three.RepeatWrapping
+//y 镜像
+doorTexture.wrapT=Three.MirroredRepeatWrapping
+
+console.log('doorTexture', doorTexture)
+
 
 const cubeGeometry = new Three.BoxGeometry(1, 1, 1)
 const material = new Three.MeshBasicMaterial({ color: '#ffff00',map:doorTexture })
