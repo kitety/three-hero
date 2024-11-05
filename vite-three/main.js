@@ -3,7 +3,8 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：纹理属性 详解纹理偏移
+// 目标：透明纹理
+// 黑色透明，白色不透明
 
 // 创建场景
 const scene = new Three.Scene()
@@ -17,14 +18,16 @@ camera.position.set(0, 0, 10)
 let cube;
 
 const texture = new Three.TextureLoader()
+const alphaDoorTexture = texture.load('./assets/textures/door/alpha.jpg')
+const doorTexture = texture.load('./assets/textures/door/color.jpg')
 // const doorTexture = texture.load('./assets/imgs/door.jpg')
-const textureM = texture.load('./assets/textures/minecraft.png')
+// const textureM = texture.load('./assets/textures/minecraft.png')
 //magFilter
 // 原本4*4 展示为80*80 magFilter
-textureM.magFilter=Three.NearestFilter
+// textureM.magFilter=Three.NearestFilter
 // minFilter
 // 原本80*80 展示为4*4 minFilter
-textureM.minFilter=Three.NearestFilter
+// textureM.minFilter=Three.NearestFilter
 
 // 纹理偏移
 /**
@@ -52,9 +55,21 @@ offset.y 正值会使纹理向下移动
 
 
 const cubeGeometry = new Three.BoxGeometry(1, 1, 1)
-const material = new Three.MeshBasicMaterial({ color: '#ffff00',map:textureM })
+const material = new Three.MeshBasicMaterial({
+  color: '#ffff00', map: doorTexture, alphaMap: alphaDoorTexture, transparent: true,
+  // opacity: 0.5,
+  side: Three.DoubleSide
+
+})
 cube = new Three.Mesh(cubeGeometry, material)
 scene.add(cube)
+
+// 平面
+const plane = new Three.Mesh(new Three.PlaneGeometry(1, 1), material)
+plane.position.set(2, 0, 0)
+scene.add(plane)
+
+
 
 // gui
 const gui = new dat.GUI()
