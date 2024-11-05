@@ -17,9 +17,24 @@ camera.position.set(0, 0, 10)
 let cube;
 
 const texture = new Three.TextureLoader()
-const doorTexture = texture.load('./assets/door.jpg')
+// const doorTexture = texture.load('./assets/imgs/door.jpg')
+const textureM = texture.load('./assets/textures/minecraft.png')
+//magFilter
+// 原本4*4 展示为80*80 magFilter
+textureM.magFilter=Three.NearestFilter
+// minFilter
+// 原本80*80 展示为4*4 minFilter
+textureM.minFilter=Three.NearestFilter
+
 // 纹理偏移
-// doorTexture.offset.x=0.5
+/**
+ * 在Three.js中，纹理偏移(offset)的坐标系统是这样工作的：
+纹理坐标系统的原点(0,0)在左下角
+offset的正值会使纹理向相反方向移动：
+offset.x 正值会使纹理向左移动
+offset.y 正值会使纹理向下移动
+ */
+// doorTexture.offset.x=0.2
 // doorTexture.offset.y=0.5
 
 // 设置旋转
@@ -27,17 +42,17 @@ const doorTexture = texture.load('./assets/door.jpg')
 // doorTexture.rotation=Math.PI/4
 // doorTexture.center.set(0.5,0.5)
 // 设置是否重复
-doorTexture.repeat.set(2,3)
+// doorTexture.repeat.set(2,3)
 //x 重复
-doorTexture.wrapS=Three.RepeatWrapping
+// doorTexture.wrapS=Three.RepeatWrapping
 //y 镜像
-doorTexture.wrapT=Three.MirroredRepeatWrapping
+// doorTexture.wrapT=Three.MirroredRepeatWrapping
 
-console.log('doorTexture', doorTexture)
+// console.log('doorTexture', doorTexture)
 
 
 const cubeGeometry = new Three.BoxGeometry(1, 1, 1)
-const material = new Three.MeshBasicMaterial({ color: '#ffff00',map:doorTexture })
+const material = new Three.MeshBasicMaterial({ color: '#ffff00',map:textureM })
 cube = new Three.Mesh(cubeGeometry, material)
 scene.add(cube)
 
