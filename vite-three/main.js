@@ -3,8 +3,8 @@ import gsap from 'gsap';
 import * as Three from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 // console.log('OrbitControls', OrbitControls)
-// 目标：透明纹理
-// 黑色透明，白色不透明
+// 目标：环境遮挡贴图与强度
+// 黑色暗下去，白色不动，灰色半透明
 
 // 创建场景
 const scene = new Three.Scene()
@@ -20,6 +20,8 @@ let cube;
 const texture = new Three.TextureLoader()
 const alphaDoorTexture = texture.load('./assets/textures/door/alpha.jpg')
 const doorTexture = texture.load('./assets/textures/door/color.jpg')
+// 环境遮挡贴图
+const ambientOcclusionTexture = texture.load('./assets/textures/door/ambientOcclusion.jpg')
 // const doorTexture = texture.load('./assets/imgs/door.jpg')
 // const textureM = texture.load('./assets/textures/minecraft.png')
 //magFilter
@@ -55,17 +57,24 @@ offset.y 正值会使纹理向下移动
 
 
 const cubeGeometry = new Three.BoxGeometry(1, 1, 1)
+// 第二组uv
+cubeGeometry.setAttribute('uv2', new Three.Float32BufferAttribute(cubeGeometry.attributes.uv.array, 2))
 const material = new Three.MeshBasicMaterial({
   color: '#ffff00', map: doorTexture, alphaMap: alphaDoorTexture, transparent: true,
-  // opacity: 0.5,
-  side: Three.DoubleSide
-
+  opacity: 1,
+  // side: Three.DoubleSide,
+  aoMap: ambientOcclusionTexture,
+  aoMapIntensity: 1,
 })
+// 更加立体 真实
 cube = new Three.Mesh(cubeGeometry, material)
 scene.add(cube)
 
 // 平面
-const plane = new Three.Mesh(new Three.PlaneGeometry(1, 1), material)
+const planeGeometry = new Three.PlaneGeometry(1, 1)
+// ao贴图需要第二组uv
+planeGeometry.setAttribute('uv2', new Three.Float32BufferAttribute(planeGeometry.attributes.uv.array, 2))
+const plane = new Three.Mesh(planeGeometry, material)
 plane.position.set(2, 0, 0)
 scene.add(plane)
 
