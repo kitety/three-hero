@@ -96,7 +96,7 @@ scene.add(sphere)
 // 平面
 const planeGeometry = new Three.PlaneGeometry(10, 10)
 const plane = new Three.Mesh(planeGeometry, sphereMaterial)
-plane.position.set(0, -1, 0)
+plane.position.set(0, -1.2, 0)
 plane.rotation.x = -Math.PI / 2
 
 // 接收阴影
@@ -110,6 +110,17 @@ scene.add(light)
 // 直线光源
 const directionalLight = new Three.DirectionalLight(0xffffff, 1)
 directionalLight.position.set(10, 10, 10)
+// 模糊度
+// directionalLight.shadow.radius = 20
+// 阴影贴图分辨率
+// directionalLight.shadow.mapSize.set(4096, 4096)
+// 阴影相机属性
+directionalLight.shadow.camera.near = 1
+directionalLight.shadow.camera.far = 30
+directionalLight.shadow.camera.top = 10
+directionalLight.shadow.camera.bottom = -10
+directionalLight.shadow.camera.left = -10
+directionalLight.shadow.camera.right = 10
 // 投射阴影
 directionalLight.castShadow = true
 scene.add(directionalLight)
@@ -118,6 +129,10 @@ scene.add(directionalLight)
 
 // gui
 const gui = new dat.GUI()
+gui.add(directionalLight.shadow.camera, 'near').min(0).max(30).step(0.01).onChange((value) => {
+  console.log('near', value)
+  directionalLight.shadow.camera.updateProjectionMatrix()
+})
 // x
 // const cubeFolder = gui.addFolder('位置')
 // cubeFolder.add(cube.position, 'x', 0, 5).name('x轴').step(0.01).onChange((value) => {
